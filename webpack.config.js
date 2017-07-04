@@ -49,7 +49,10 @@ module.exports = {
       },
       {
       test: /\.(jpe?g|png|gif|svg)$/,
-      use: 'url-loader'
+      use: [
+        { loader: 'url-loader',
+          options: {limit: 40000}},
+        'image-webpack-loader']
       },
       {
        test: /\.(woff|woff2)(\?v=\d+\.\d+\.\d+)?$/,
@@ -88,7 +91,8 @@ module.exports = {
     }),
     new ExtractTextPlugin({
     filename: 'styles.css',
-    allChunks: true
+    allChunks: true,
+    publicPath: '/'
   }),
     new webpack.ProvidePlugin({
      $: "jquery",
