@@ -76,10 +76,21 @@ body
           width: 100%
           height: 300px
           background-color: rgba(0,0,0,0.75)
+          position: relative
+          .icons-styling
+            display: flex
+            justify-content: space-between
+            align-items: center
+            position: absolute
+            width: 120px
+            height: 35px
+            transform: translate(400px, -45px)
+
           h1
             margin-bottom: 50px
+
           .content-h2
-            margin-top: -10px
+            margin-top: 5px
             font-size: 1.3em
           .search
             display: flex
@@ -113,16 +124,34 @@ body
               &:active
                 box-shadow: inset 0 0 5px rgba(0,0,0,0.8)
         .list-container
-          display: flex
+          //display: flex
           align-items: center
           justify-content: center
           color: black
-          .inline-text
-            padding: 3px 15px
-            font-size: 0.9em
-            margin-top: 15px
+          .list-content
+            display: flex
+            align-items: center
+            justify-content: center
+            padding: 5px 35px
+            font-size: 0.8em
             color: white
-            background-color: rgba(0,0,0,0.7)
+            background-color: rgba(0,0,0,0.8)
+
+.inline-text
+  display: flex
+  align-items: center
+  justify-content: center
+  font-family: monospace
+  padding: 3px 15px
+  font-size: 0.9em
+  margin-top: 15px
+  color: white
+  background-color: rgba(0,0,0,0.9)
+  transform: translateY(-15px)
+  .git-hub
+    padding-left: 10px
+    color: white
+
 
 @media (max-device-height: 800px)
   .wrapper
@@ -131,7 +160,7 @@ body
     .header-container
       height: 250px !important
       .content-h2
-        margin-top: -10px !important
+        margin-top: 10px !important
         font-size: 1.2em !important
       .search
-        margin-top: 35px !important
+        margin-top: 25px !important
