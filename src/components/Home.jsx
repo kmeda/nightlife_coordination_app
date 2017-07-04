@@ -13,8 +13,8 @@ class Home extends Component {
   render(){
     return (
       <div className="container">
-        <div><img className="bg-image-1" src={bg_image_1} alt="image-1"/></div>
-        <div><img className="bg-image-2" src={bg_image_2} alt="image-2"/></div>
+        <div><img className="bg-image-1"  alt="image-1"/></div>
+        <div><img className="bg-image-2"  alt="image-2"/></div>
 
         <Body />
       </div>

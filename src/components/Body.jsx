@@ -10,7 +10,7 @@ class Body extends Component {
     return (
       <div className="inner-wrapper">
         <div className="wrapper">
-          <div className="login-btn">Logout</div>
+          <div className="login-btn">Login</div>
           <div className="inner-container">
             <div className="header-container">
               <h1>Plans Tonite?</h1>

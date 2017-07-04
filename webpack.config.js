@@ -49,10 +49,7 @@ module.exports = {
       },
       {
       test: /\.(jpe?g|png|gif|svg)$/,
-      use: [
-        { loader: 'url-loader',
-          options: {limit: 40000}},
-        'image-webpack-loader']
+      use: 'url-loader'
       },
       {
        test: /\.(woff|woff2)(\?v=\d+\.\d+\.\d+)?$/,
