@@ -37,8 +37,7 @@ module.exports = {
       {
         test: /\.css$/,
         use: ExtractTextPlugin.extract({
-          use: 'css-loader?importLoaders=1',
-          publicPath: '/'
+          use: 'css-loader?importLoaders=1'
         }),
       },
       {
@@ -92,7 +91,8 @@ module.exports = {
     }),
     new ExtractTextPlugin({
     filename: 'styles.css',
-    allChunks: true
+    allChunks: true,
+    publicPath: '../'
   }),
     new webpack.ProvidePlugin({
      $: "jquery",
