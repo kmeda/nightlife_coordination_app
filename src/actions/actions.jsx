@@ -1,7 +1,6 @@
 import firebase, {firebaseRef, twitterProvider} from '../firebase/index.js';
 import axios from "axios";
 
-
 export var setSearchTerm = (term)=>{
   return {
     type: "SET_SEARCH_TERM",
@@ -18,41 +17,12 @@ export var saveSearch = ()=>{
 
 
 export var getRecentSearch = (searchTerm)=>{
-  // import yelpAPI calls
-  // call should post credentials and retrive an auth token
-  // call should set header token and return a promise
-  // returned promise accepts the searchTerm and gets the search results
-  //invoke axios requests and dispatch actions to get results and set new state.
-
-  //state change will trigger component to render the list.
-
-  // go with the flow and then refactor
 
   return (dispatch, getState)=>{
 
-    const config = {
-            method: 'post',
-            url: "https://api.yelp.com/oauth2/token",
-            data:null,
-            headers: {
-              'Access-Control-Allow-Origin': '*',
-              'Content-Type': 'application/json',
-              grant_type: "client_credentials",
-              client_id: "W4toIoITHRYWdM2Ye27wsQ",
-              client_secret: "h8hEAuzO9TvuXjriOwqdrLaPm0j4UYCCOroRwvsvZ0odI3iJmLEsnYAaaZ1PUJR3"
-            },
-      };
-
-    var headers = {
-      'Access-Control-Allow-Origin': '*',
-      grant_type: "client_credentials",
-      client_id: "W4toIoITHRYWdM2Ye27wsQ",
-      client_secret: "h8hEAuzO9TvuXjriOwqdrLaPm0j4UYCCOroRwvsvZ0odI3iJmLEsnYAaaZ1PUJR3"
-    }
-
-    axios.request(config).then((res)=>{
-      console.log(res);
-    }).catch((error)=>console.log(error));
+    axios.get("http://localhost:3050/yelpapi").then((res)=>{
+      console.log(res.data.data);
+    })
   };
 
 }
