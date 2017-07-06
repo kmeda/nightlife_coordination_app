@@ -8,12 +8,12 @@
     "build": "NODE_ENV=production npm run clean && webpack -p",
     "serve": "webpack-dev-server --progress --inline --hot",
     "start": "npm run clean && webpack -p && node server.js"
-
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
     "autoprefixer": "^7.1.1",
+    "axios": "^0.16.2",
     "babel-core": "^6.17.0",
     "babel-loader": "^7.1.1",
     "babel-preset-env": "^1.1.4",

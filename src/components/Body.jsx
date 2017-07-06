@@ -19,14 +19,15 @@ class Body extends Component {
   handleLogout(){
     //dispatch login action here
     var {dispatch} = this.props;
-    dispatch(actions.logout());
     dispatch(actions.startLogout());
 
   }
 
   handleChange(e){
     e.preventDefault();
-    //dispatch action to set input as state
+    var {dispatch} = this.props;
+    var term = this.refs.searchTerm.value;
+    dispatch(actions.setSearchTerm(term));
   }
 
   handleSubmit(){
@@ -42,13 +43,11 @@ class Body extends Component {
 
     var {uid, loggingIn, dispatch} = this.props.auth;
 
-    // if no uid and logging is true
-
     var renderButton = ()=>{
       if (!uid && !loggingIn) {
         return <div className="nc-login-btn" onClick={this.handleLogin.bind(this)}>Login</div>
       } else if (!uid && loggingIn){
-        return <div className="nc-login-btn"><span className="fa fa-spinner fa-spin"></span></div>
+        return <div className="nc-login-btn"><span className="fa fa-circle-o-notch fa-spin fa-fw"></span></div>
       } else {
         return <div className="nc-login-btn" onClick={this.handleLogout.bind(this)}>Logout</div>
       }
