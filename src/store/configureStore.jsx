@@ -1,12 +1,12 @@
 import * as Redux from 'redux';
 import thunk from 'redux-thunk';
 
-import {placeHolderReducer} from '../reducers/reducers.jsx';
+import {authReducer} from '../reducers/reducers.jsx';
 
 export var configure = (initialState = {}) => {
 
   var reducer = Redux.combineReducers({
-    placeHolder: placeHolderReducer
+    auth: authReducer
   });
 
   var store = Redux.createStore(
