@@ -4,7 +4,6 @@ const path = require('path');
 const app = express();
 
 // Server routes...
-app.use('Access-Control-Allow-Origin':'*');
 app.get('/hello', (req, res) => res.send({ hi: 'there' }));
 
 if (process.env.NODE_ENV !== 'production') {
