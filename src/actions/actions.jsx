@@ -43,10 +43,19 @@ export var clearItems = ()=>{
 export var getRecentSearch = (searchTerm, offset)=>{
 
   return (dispatch, getState)=>{
-    axios.get(`http://localhost:3050/yelpapi?location=${searchTerm}&offset=${offset}`).then((res)=>{
-      dispatch(fetchItems(res.data.data.businesses));
-      console.log(res.data.data);
-    })
+    axios.get(`http://localhost:3050/yelpapi/businesses?location=${searchTerm}&offset=${offset}`).then((res)=>{
+      let businesses = [];
+        res.data.data.businesses.map((business)=>{
+          return axios.get(`http://localhost:3050/yelpapi/reviews?id=${business.id}`).then((result)=>{
+             let obj = Object.assign({}, business, {reviews: result.data.data.reviews});
+             businesses.push(obj);
+             if (businesses.length === 19) {
+                console.log(businesses);
+                dispatch(fetchItems(businesses));
+             }
+        });
+      });
+    });
   };
 }
 

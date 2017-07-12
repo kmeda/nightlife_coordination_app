@@ -34,7 +34,7 @@ export var recentSearchReducer = (state={searchTerm: ""}, action) => {
     case "SAVE_SEARCH_TERM":
     return {
       ...state,
-      saveSearch: action.term
+      savedSearch: action.term
     }
     default:
       return state;

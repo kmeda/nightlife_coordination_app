@@ -17,7 +17,7 @@ next();
 // Server routes...
 app.get('/hello', (req, res) => res.send({ hi: 'there' }));
 
-app.get('/yelpapi', (req, res)=>{
+app.get('/yelpapi/businesses', (req, res)=>{
 
   var config = {
     headers:{
@@ -26,15 +26,32 @@ app.get('/yelpapi', (req, res)=>{
   }
   console.log(req.query.location);
   console.log(req.query.offset);
-  var url = `https://api.yelp.com/v3/businesses/search?term=bars&location=${req.query.location}&limit=50&offset=${req.query.offset}`;
+  var url = `https://api.yelp.com/v3/businesses/search?term=bars&location=${req.query.location}&limit=20&offset=${req.query.offset}`;
   axios.get(url, config).then((response)=>{
-    const json = CircularJSON.stringify(response);
+    let json = CircularJSON.stringify(response);
     res.send(json);
   }).catch((error)=>{
-  
+
     console.log(error);
 });
 });
+
+app.get('/yelpapi/reviews', (req, res)=>{
+  var config = {
+    headers:{
+      Authorization: 'Bearer 9gHeNtI4Ioq6Wa3fKlztqiIdoYzxT0ucMz3qQNHS0fBB6rnuhyBxRoxvMeBgSixUoQNoldJh4bEaJCW825FVZi95CEly5B5kHYgteiNgiYYhThg8vjKELkPUSotbWXYx'
+    }
+  }
+  var url = `https://api.yelp.com/v3/businesses/${req.query.id}/reviews`;
+  axios.get(url, config).then((response)=>{
+    let json = CircularJSON.stringify(response);
+    res.send(json);
+  }).catch((error)=>{
+    console.log(error);
+});
+
+});
+
 
 if (process.env.NODE_ENV !== 'production') {
   const webpackMiddleware = require('webpack-dev-middleware');
