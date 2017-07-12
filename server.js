@@ -24,14 +24,16 @@ app.get('/yelpapi', (req, res)=>{
       Authorization: 'Bearer 9gHeNtI4Ioq6Wa3fKlztqiIdoYzxT0ucMz3qQNHS0fBB6rnuhyBxRoxvMeBgSixUoQNoldJh4bEaJCW825FVZi95CEly5B5kHYgteiNgiYYhThg8vjKELkPUSotbWXYx'
     }
   }
-
-  var url = "https://api.yelp.com/v3/businesses/search?term=bars&location=london&limit=50";
+  console.log(req.query.location);
+  console.log(req.query.offset);
+  var url = `https://api.yelp.com/v3/businesses/search?term=bars&location=${req.query.location}&limit=50&offset=${req.query.offset}`;
   axios.get(url, config).then((response)=>{
-
     const json = CircularJSON.stringify(response);
     res.send(json);
-
-  }).catch((error)=>console.log(error));
+  }).catch((error)=>{
+  
+    console.log(error);
+});
 });
 
 if (process.env.NODE_ENV !== 'production') {

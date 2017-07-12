@@ -3,6 +3,8 @@ import React,{Component} from 'react';
 import * as Redux from 'react-redux';
 import * as actions from "../actions/actions.jsx";
 
+import List from './List.jsx';
+
 class Body extends Component {
   constructor(props){
     super(props);
@@ -23,6 +25,10 @@ class Body extends Component {
 
   }
 
+  componentDidMount() {
+      this.refs.searchTerm.focus();
+  }
+
   handleChange(e){
     e.preventDefault();
     var {dispatch} = this.props;
@@ -30,11 +36,24 @@ class Body extends Component {
     dispatch(actions.setSearchTerm(term));
   }
 
-  handleSubmit(){
+  handleSubmit(e){
+    e.preventDefault();
     //dispatch action getRecentSearch with searchterm here
     //updates the state and renders the list based on uid
     //clear searchterm state and input
-
+    var {dispatch, searchTerm} = this.props;
+      dispatch(actions.clearItems());
+    if (searchTerm.length === 0 || searchTerm.match(/^\s*$/g)) {
+        this.refs.searchTerm.value = '';
+      dispatch(actions.clearSearchTerm());
+        this.refs.searchTerm.focus();
+      return;
+    }
+    dispatch(actions.saveSearchTerm(searchTerm));
+    dispatch(actions.getRecentSearch(searchTerm, 0));
+      this.refs.searchTerm.value = '';
+    dispatch(actions.clearSearchTerm());
+      this.refs.searchTerm.focus();
 
   }
 
@@ -70,14 +89,11 @@ class Body extends Component {
 
               <div className="nc-search">
                 <input type="text" className="nc-input-box" ref="searchTerm" onChange={this.handleChange.bind(this)}></input>
-                <div className="nc-search-btn">Go</div>
+                <button className="nc-search-btn" onClick={this.handleSubmit.bind(this)}>Go</button>
               </div>
             </div>
             <div className="nc-list-container">
-              <br/><br/><br/><br/>
-              <div className="nc-list-content">Search for bars local to your area..</div>
-              <br/><br/><br/><br/>
-              <div className="nc-list-content">Powered by Yelp</div>
+              <List />
             </div>
           </div>
 
@@ -92,7 +108,8 @@ class Body extends Component {
 export default Redux.connect(
   (state)=>{
     return {
-      auth: state.auth
+      auth: state.auth,
+      searchTerm: state.recentSearch.searchTerm
     }
   }
 )(Body);

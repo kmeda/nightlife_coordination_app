@@ -10,7 +10,7 @@ import '../styles/main.scss';
 const actions = require('./actions/actions.jsx');
 var store = require('./store/configureStore.jsx').configure();
 
-store.dispatch(actions.getRecentSearch(null));
+
 
 firebase.auth().onAuthStateChanged((user)=>{
   if (user) {

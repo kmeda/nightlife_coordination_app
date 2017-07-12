@@ -1,14 +1,15 @@
 import * as Redux from 'redux';
 import thunk from 'redux-thunk';
 
-import {authReducer, recentSearchReducer, searchResultsReducer} from '../reducers/reducers.jsx';
+import {authReducer, recentSearchReducer, searchResultsReducer, offsetReducer} from '../reducers/reducers.jsx';
 
 export var configure = (initialState = {}) => {
 
   var reducer = Redux.combineReducers({
     auth: authReducer,
     recentSearch: recentSearchReducer,
-    searchResults: searchResultsReducer
+    searchResults: searchResultsReducer,
+    offset: offsetReducer
   });
 
   var store = Redux.createStore(
