@@ -46,15 +46,17 @@ export var getRecentSearch = (searchTerm, offset)=>{
     axios.get(`http://localhost:3050/yelpapi/businesses?location=${searchTerm}&offset=${offset}`).then((res)=>{
       let businesses = [];
         res.data.data.businesses.map((business)=>{
-          return axios.get(`http://localhost:3050/yelpapi/reviews?id=${business.id}`).then((result)=>{
+          console.log(business.id.normalize('NFD').replace(/[\u0300-\u036f]/g, ""));
+          return axios.get(`http://localhost:3050/yelpapi/reviews?id=${business.id.normalize('NFD').replace(/[\u0300-\u036f]/g, "")}`).then((result)=>{
              let obj = Object.assign({}, business, {reviews: result.data.data.reviews});
              businesses.push(obj);
-             if (businesses.length === 19) {
+             if (businesses.length === 49) {
                 console.log(businesses);
                 dispatch(fetchItems(businesses));
              }
         });
       });
+
     });
   };
 }

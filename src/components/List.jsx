@@ -34,7 +34,7 @@ class List extends Component {
       return (
         <div>
             {this._renderList()}
-            <div>Showing 50/4000 <button onClick={this._loadMore.bind(this)}>Load More..</button></div>
+            <div className="nc-pagination"><button onClick={this._loadMore.bind(this)}>Load More..</button></div>
         </div>
       );
 
