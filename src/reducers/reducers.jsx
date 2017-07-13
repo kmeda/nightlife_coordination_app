@@ -62,3 +62,14 @@ export var offsetReducer = (state={value: 0}, action)=>{
       return state;
   }
 }
+
+export var loadingProgressReducer = (state={loading: false}, action) =>{
+  switch (action.type) {
+    case "IS_LOADING":
+      return {
+        loading: action.val
+      };
+    default:
+      return state;      
+  }
+}

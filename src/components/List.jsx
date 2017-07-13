@@ -9,7 +9,13 @@ class List extends Component {
 
   }
 
+  componentWillReceiveProps(nextProps){
+    let {dispatch} = this.props;
+    if (nextProps.searchResults > this.props.searchResults) {
+      // dispatch(actions.isLoading(false));
+    }
 
+  }
     _loadMore(e) {
       e.preventDefault();
       //increment offset and pass searchterm + offset
@@ -19,7 +25,7 @@ class List extends Component {
     _renderList(){
       return Object.values(this.props.searchResults).map((item)=>{
         return (
-          <div key={item.id}>{item.id}</div>
+          <div className="nc-pagination" key={item.id}>{item.id}</div>
         );
       })
 
@@ -27,18 +33,27 @@ class List extends Component {
 
   render(){
 
-    let {searchResults} = this.props;
+    let {searchResults, loading, dispatch} = this.props;
+
+    if (loading) {
+      return (
+        <div className="nc-initial-load"><span className="fa fa-spinner fa-pulse fa-3x fa-fw"></span></div>
+      )
+    }
 
     if (searchResults.length > 0) {
 
       return (
         <div>
             {this._renderList()}
-            <div className="nc-pagination"><button onClick={this._loadMore.bind(this)}>Load More..</button></div>
+            <div className="nc-pagination">
+              <button className="nc-page-btn" onClick={this._loadMore.bind(this)}>Load More..</button>
+            </div>
         </div>
       );
 
-    } else {
+    }
+    else {
       return (
         <div>
           <br/><br/><br/><br/>
@@ -57,7 +72,8 @@ export default Redux.connect(
     return {
       searchResults: state.searchResults,
       searchTerm: state.recentSearch.searchTerm,
-      offset: state.offset.value
+      offset: state.offset.value,
+      loading: state.loadingProgress.loading
     }
   }
 )(List);

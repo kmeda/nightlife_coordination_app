@@ -49,6 +49,7 @@ class Body extends Component {
         this.refs.searchTerm.focus();
       return;
     }
+    dispatch(actions.isLoading(true));
     dispatch(actions.saveSearchTerm(searchTerm));
     dispatch(actions.getRecentSearch(searchTerm, 0));
       this.refs.searchTerm.value = '';

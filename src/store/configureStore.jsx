@@ -1,7 +1,7 @@
 import * as Redux from 'redux';
 import thunk from 'redux-thunk';
 
-import {authReducer, recentSearchReducer, searchResultsReducer, offsetReducer} from '../reducers/reducers.jsx';
+import {authReducer, recentSearchReducer, searchResultsReducer, offsetReducer, loadingProgressReducer} from '../reducers/reducers.jsx';
 
 export var configure = (initialState = {}) => {
 
@@ -9,7 +9,8 @@ export var configure = (initialState = {}) => {
     auth: authReducer,
     recentSearch: recentSearchReducer,
     searchResults: searchResultsReducer,
-    offset: offsetReducer
+    offset: offsetReducer,
+    loadingProgress: loadingProgressReducer
   });
 
   var store = Redux.createStore(

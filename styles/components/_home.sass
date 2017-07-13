@@ -1,7 +1,6 @@
 body
   padding: 0
   margin: 0
-
 .nc-container
   height: auto
   width: 100%
@@ -127,15 +126,17 @@ body
               &:focus
                 outline: 0
         .nc-list-container
-          //display: flex
-          //flex-direction: column
-          //align-items: center
-          //justify-content: center
           width: 100%
           height: 70%
           color: black
           overflow: auto
-          background-color: pink
+          &:hover
+            // overflow: auto
+
+          .nc-initial-load
+            margin-left: 47%
+            //margin-right: auto
+            margin-top: 70px
           .nc-list-content
             text-align: center
             padding: 5px 35px
@@ -143,10 +144,23 @@ body
             color: white
             background-color: rgba(0,0,0,0.8)
           .nc-pagination
-            
+            display: flex
+            align-items: center
+            justify-content: center
             width: 100%
             height: 25px
-            background-color: #ffc700
+            border-bottom: 1px solid #ff9900
+            background-color: rgba(0,0,0,0.9)
+            color: white
+            .nc-page-btn
+              background-color: rgba(0,0,0,0.9)
+              color: #ff9900
+              height: 24px
+              border: none
+              &:active
+                color: white
+              &:focus
+                outline: 0
 
 .nc-inline-text
   display: flex
