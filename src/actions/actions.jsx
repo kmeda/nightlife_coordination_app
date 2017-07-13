@@ -49,7 +49,7 @@ export var getRecentSearch = (searchTerm, offset)=>{
           return axios.get(`http://localhost:3050/yelpapi/reviews?id=${business.id.normalize('NFD').replace(/[\u0300-\u036f]/g, "")}`).then((result)=>{
              let obj = Object.assign({}, business, {reviews: result.data.data.reviews});
              businesses.push(obj);
-             if (businesses.length === 49) {
+             if (businesses.length === 20) {
                 console.log(businesses);
                 dispatch(fetchItems(businesses));
              }
@@ -72,13 +72,17 @@ export var isLoading = (val) =>{
 
 //set offset
 
-export var incrementOffset = (val) =>{
+export var incrementOffset = () =>{
   return {
-    type: "INCREMENT_OFFSET",
-    val
+    type: "INCREMENT_OFFSET"
   }
 }
 
+export var clearOffset = ()=>{
+  return {
+    type: "CLEAR_OFFSET"
+  }
+}
 
 //Login Logout actions
 export var login = (uid, name) =>{

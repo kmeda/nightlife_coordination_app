@@ -43,6 +43,7 @@ class Body extends Component {
     //clear searchterm state and input
     var {dispatch, searchTerm} = this.props;
       dispatch(actions.clearItems());
+      dispatch(actions.clearOffset());
     if (searchTerm.length === 0 || searchTerm.match(/^\s*$/g)) {
         this.refs.searchTerm.value = '';
       dispatch(actions.clearSearchTerm());

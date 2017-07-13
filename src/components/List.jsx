@@ -12,14 +12,20 @@ class List extends Component {
   componentWillReceiveProps(nextProps){
     let {dispatch} = this.props;
     if (nextProps.searchResults > this.props.searchResults) {
-      // dispatch(actions.isLoading(false));
+      dispatch(actions.isLoading(false));
+    }
+
+    if (nextProps.offset > this.props.offset) {
+      dispatch(actions.getRecentSearch(this.props.searchTerm, nextProps.offset));
     }
 
   }
     _loadMore(e) {
       e.preventDefault();
       //increment offset and pass searchterm + offset
-      // dispatch(actions.getRecentSearch(searchTerm, offset));
+      let {dispatch, searchTerm, offset} = this.props;
+      dispatch(actions.incrementOffset());
+
     }
 
     _renderList(){
@@ -71,7 +77,7 @@ export default Redux.connect(
   (state)=>{
     return {
       searchResults: state.searchResults,
-      searchTerm: state.recentSearch.searchTerm,
+      searchTerm: state.recentSearch.savedSearch,
       offset: state.offset.value,
       loading: state.loadingProgress.loading
     }

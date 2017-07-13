@@ -56,7 +56,11 @@ export var offsetReducer = (state={value: 0}, action)=>{
   switch (action.type) {
     case "INCREMENT_OFFSET":
       return {
-        value: action.val
+        value: state.value+20
+      }
+    case "CLEAR_OFFSET":
+      return {
+        value: 0
       }
     default:
       return state;
@@ -70,6 +74,6 @@ export var loadingProgressReducer = (state={loading: false}, action) =>{
         loading: action.val
       };
     default:
-      return state;      
+      return state;
   }
 }

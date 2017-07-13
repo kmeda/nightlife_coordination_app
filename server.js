@@ -26,7 +26,7 @@ app.get('/yelpapi/businesses', (req, res)=>{
   }
   console.log(req.query.location);
   console.log(req.query.offset);
-  var url = `https://api.yelp.com/v3/businesses/search?term=bars&location=${req.query.location}&limit=50&offset=${req.query.offset}`;
+  var url = `https://api.yelp.com/v3/businesses/search?term=bars&location=${req.query.location}&limit=20&offset=${req.query.offset}`;
   axios.get(url, config).then((response)=>{
     let json = CircularJSON.stringify(response);
     res.send(json);
