@@ -54,11 +54,11 @@ export var cleartotalBars = ()=>{
 export var getRecentSearch = (searchTerm, offset)=>{
 
   return (dispatch, getState)=>{
-    axios.get(`http://localhost:3050/yelpapi/businesses?location=${searchTerm}&offset=${offset}`).then((res)=>{
+    axios.get(`https://nightlife-coordination-fcc.herokuapp.com/yelpapi/businesses?location=${searchTerm}&offset=${offset}`).then((res)=>{
       let businesses = [];
       dispatch(totalBars(res.data.data.total));
         res.data.data.businesses.map((business)=>{
-          return axios.get(`http://localhost:3050/yelpapi/reviews?id=${business.id.normalize('NFD').replace(/[\u0300-\u036f]/g, "")}`).then((result)=>{
+          return axios.get(`https://nightlife-coordination-fcc.herokuapp.com/yelpapi/reviews?id=${business.id.normalize('NFD').replace(/[\u0300-\u036f]/g, "")}`).then((result)=>{
              let obj = Object.assign({}, business, {reviews: result.data.data.reviews});
              businesses.push(obj);
              if (businesses.length === 20) {
