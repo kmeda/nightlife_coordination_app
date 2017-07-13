@@ -44,13 +44,15 @@ class Body extends Component {
     var {dispatch, searchTerm} = this.props;
       dispatch(actions.clearItems());
       dispatch(actions.clearOffset());
+      dispatch(actions.cleartotalBars());
+
     if (searchTerm.length === 0 || searchTerm.match(/^\s*$/g)) {
         this.refs.searchTerm.value = '';
       dispatch(actions.clearSearchTerm());
         this.refs.searchTerm.focus();
       return;
     }
-    dispatch(actions.isLoading(true));
+    dispatch(actions.initialLoading(true));
     dispatch(actions.saveSearchTerm(searchTerm));
     dispatch(actions.getRecentSearch(searchTerm, 0));
       this.refs.searchTerm.value = '';

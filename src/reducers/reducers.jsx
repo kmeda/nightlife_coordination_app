@@ -41,12 +41,28 @@ export var recentSearchReducer = (state={searchTerm: ""}, action) => {
   }
 }
 
-export var searchResultsReducer = (state=[], action) => {
+export var searchResultsReducer = (state={bars: []}, action) => {
   switch (action.type) {
     case "FETCH_ITEMS":
-      return state.concat(action.payload)
+      return {
+        ...state,
+        bars: state.bars.concat(action.payload)
+      }
     case "CLEAR_ITEMS":
-      return [];
+      return {
+        ...state,
+        bars: []
+      };
+    case "TOTAL_BARS":
+    return {
+      ...state,
+      totalBars: action.total
+    }
+    case "CLEAR_TOTAL_BARS":
+    return {
+      ...state,
+      totalBars: null
+    }
     default:
     return state;
   }
@@ -69,10 +85,16 @@ export var offsetReducer = (state={value: 0}, action)=>{
 
 export var loadingProgressReducer = (state={loading: false}, action) =>{
   switch (action.type) {
-    case "IS_LOADING":
+    case "INITIAL_LOADING":
       return {
+        ...state,
         loading: action.val
       };
+    case "LOADING_MORE":
+      return {
+        ...state,
+        loadingMore: action.val
+      }
     default:
       return state;
   }

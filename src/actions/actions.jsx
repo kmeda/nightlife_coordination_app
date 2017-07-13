@@ -40,17 +40,29 @@ export var clearItems = ()=>{
     }
 }
 
+export var totalBars = (total)=>{
+  return {
+    type: "TOTAL_BARS",
+    total
+  }
+}
+export var cleartotalBars = ()=>{
+  return {
+    type: "CLEAR_TOTAL_BARS"
+  }
+}
 export var getRecentSearch = (searchTerm, offset)=>{
 
   return (dispatch, getState)=>{
     axios.get(`http://localhost:3050/yelpapi/businesses?location=${searchTerm}&offset=${offset}`).then((res)=>{
       let businesses = [];
+      dispatch(totalBars(res.data.data.total));
         res.data.data.businesses.map((business)=>{
           return axios.get(`http://localhost:3050/yelpapi/reviews?id=${business.id.normalize('NFD').replace(/[\u0300-\u036f]/g, "")}`).then((result)=>{
              let obj = Object.assign({}, business, {reviews: result.data.data.reviews});
              businesses.push(obj);
              if (businesses.length === 20) {
-                console.log(businesses);
+
                 dispatch(fetchItems(businesses));
              }
         });
@@ -62,9 +74,15 @@ export var getRecentSearch = (searchTerm, offset)=>{
 
 // Loading progress
 
-export var isLoading = (val) =>{
+export var initialLoading = (val) =>{
   return {
-    type: "IS_LOADING",
+    type: "INITIAL_LOADING",
+    val
+  }
+}
+export var loadingMore = (val) =>{
+  return {
+    type: "LOADING_MORE",
     val
   }
 }
