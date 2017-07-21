@@ -25,7 +25,10 @@ class List extends Component {
     _loadMore(e) {
       e.preventDefault();
       //increment offset and pass searchterm + offset
-      let {dispatch, searchTerm, offset} = this.props;
+      let {dispatch, searchTerm, offset, totalBars, searchResults} = this.props;
+      if (totalBars === searchResults.length) {
+        return;
+      }
       dispatch(actions.incrementOffset());
       dispatch(actions.loadingMore(true));
 
@@ -45,7 +48,7 @@ class List extends Component {
                   <div className="nc-going-count">0</div>
                 </div>
               </div>
-              <div className="nc-business-review">{item.reviews[0].text}</div>
+              <div className="nc-business-review">{item.reviews[0]? item.reviews[0].text : "No reviews"}</div>
             </div>
             <div className="nc-business-address">
               <div>{item.location.address1}</div>
@@ -73,7 +76,7 @@ class List extends Component {
   render(){
 
     let {searchResults, loading, dispatch} = this.props;
-    console.log(window.location);
+
     if (loading) {
       return (
         <div className="nc-initial-load"><span className="fa fa-spinner fa-pulse fa-3x fa-fw"></span></div>

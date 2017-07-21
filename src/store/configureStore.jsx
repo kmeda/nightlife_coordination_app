@@ -23,3 +23,4 @@ export var configure = (initialState = {}) => {
   );
   return store;
 }
+   

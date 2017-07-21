@@ -49,6 +49,7 @@ class Body extends Component {
     if (searchTerm.length === 0 || searchTerm.match(/^\s*$/g)) {
         this.refs.searchTerm.value = '';
       dispatch(actions.clearSearchTerm());
+      dispatch(actions.initialLoading(false));
         this.refs.searchTerm.focus();
       return;
     }

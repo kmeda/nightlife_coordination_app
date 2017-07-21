@@ -9,23 +9,22 @@ export var setSearchTerm = (term)=>{
     term
   }
 }
-
 export var clearSearchTerm = ()=>{
   return {
     type: "CLEAR_SEARCH_TERM"
   }
 }
-
 export var saveSearchTerm = (term)=>{
   return {
     type: "SAVE_SEARCH_TERM",
     term
   }
 }
-
 export var saveSearchHistory = (term)=>{
   //if user logged in update to firebase
 }
+
+//actions to fetch results
 
 export var fetchItems = (payload)=>{
   return {
@@ -33,13 +32,11 @@ export var fetchItems = (payload)=>{
     payload
   }
 }
-
 export var clearItems = ()=>{
     return {
       type: "CLEAR_ITEMS"
     }
 }
-
 export var totalBars = (total)=>{
   return {
     type: "TOTAL_BARS",
@@ -54,26 +51,28 @@ export var cleartotalBars = ()=>{
 export var getRecentSearch = (searchTerm, offset)=>{
 
   return (dispatch, getState)=>{
+
     axios.get(`https://nightlife-coordination-fcc.herokuapp.com/yelpapi/businesses?location=${searchTerm}&offset=${offset}`).then((res)=>{
       let businesses = [];
       dispatch(totalBars(res.data.data.total));
-        res.data.data.businesses.map((business)=>{
-          return axios.get(`https://nightlife-coordination-fcc.herokuapp.com/yelpapi/reviews?id=${business.id.normalize('NFD').replace(/[\u0300-\u036f]/g, "")}`).then((result)=>{
-             let obj = Object.assign({}, business, {reviews: result.data.data.reviews});
-             businesses.push(obj);
-             if (businesses.length === 20) {
 
-                dispatch(fetchItems(businesses));
-             }
+        var resolveAll = res.data.data.businesses.map((business)=>{
+         return axios.get(`https://nightlife-coordination-fcc.herokuapp.com/yelpapi/reviews?id=${business.id.normalize('NFD').replace(/[\u0300-\u036f]/g, "")}`).then((result)=>{
+
+            let obj = Object.assign({}, business, {reviews: result.data.data.reviews});
+            businesses.push(obj);
+
         });
       });
-
+      axios.all(resolveAll).then(()=>{
+        dispatch(fetchItems(businesses));
+      });
+      // dispatch(fetchItems(businesses));
     });
   };
 }
 
 // Loading progress
-
 export var initialLoading = (val) =>{
   return {
     type: "INITIAL_LOADING",
@@ -89,13 +88,11 @@ export var loadingMore = (val) =>{
 
 
 //set offset
-
 export var incrementOffset = () =>{
   return {
     type: "INCREMENT_OFFSET"
   }
 }
-
 export var clearOffset = ()=>{
   return {
     type: "CLEAR_OFFSET"
