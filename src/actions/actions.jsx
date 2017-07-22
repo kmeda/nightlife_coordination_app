@@ -51,13 +51,14 @@ export var cleartotalBars = ()=>{
 export var getRecentSearch = (searchTerm, offset)=>{
 
   return (dispatch, getState)=>{
-
-    axios.get(`https://nightlife-coordination-fcc.herokuapp.com/yelpapi/businesses?location=${searchTerm}&offset=${offset}`).then((res)=>{
+    var getBars = process.env.NODE_ENV === 'production' ? `https://nightlife-coordination-fcc.herokuapp.com/yelpapi/businesses?location=${searchTerm}&offset=${offset}` : `http://localhost:3050/yelpapi/businesses?location=${searchTerm}&offset=${offset}`;
+    axios.get(getBars).then((res)=>{
       let businesses = [];
       dispatch(totalBars(res.data.data.total));
 
         var resolveAll = res.data.data.businesses.map((business)=>{
-         return axios.get(`https://nightlife-coordination-fcc.herokuapp.com/yelpapi/reviews?id=${business.id.normalize('NFD').replace(/[\u0300-\u036f]/g, "")}`).then((result)=>{
+         var getReviews = process.env.NODE_ENV === 'production' ? `https://nightlife-coordination-fcc.herokuapp.com/yelpapi/reviews?id=${business.id.normalize('NFD').replace(/[\u0300-\u036f]/g, "")}` : `http://localhost:3050/yelpapi/reviews?id=${business.id.normalize('NFD').replace(/[\u0300-\u036f]/g, "")}`;
+         return axios.get(getReviews).then((result)=>{
 
             let obj = Object.assign({}, business, {reviews: result.data.data.reviews});
             businesses.push(obj);
