@@ -14,8 +14,8 @@ var store = require('./store/configureStore.jsx').configure();
 
 firebase.auth().onAuthStateChanged((user)=>{
   if (user) {
-    //store.dispatch(actions.getRecentSearch());
     store.dispatch(actions.login(user.uid, user.displayName));
+    store.dispatch(actions.getRecentSearchfromHistory());
   } else {
     store.dispatch(actions.logout());
   }

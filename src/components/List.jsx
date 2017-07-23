@@ -20,7 +20,6 @@ class List extends Component {
       dispatch(actions.getRecentSearch(this.props.searchTerm, nextProps.offset));
     }
 
-
   }
     _loadMore(e) {
       e.preventDefault();
@@ -112,6 +111,7 @@ class List extends Component {
 export default Redux.connect(
   (state)=>{
     return {
+      auth: state.auth,
       searchResults: state.searchResults.bars,
       totalBars: state.searchResults.totalBars,
       searchTerm: state.recentSearch.savedSearch,

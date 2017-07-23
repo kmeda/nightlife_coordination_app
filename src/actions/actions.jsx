@@ -20,8 +20,16 @@ export var saveSearchTerm = (term)=>{
     term
   }
 }
+
 export var saveSearchHistory = (term)=>{
   //if user logged in update to firebase
+  return (dispatch, getState)=>{
+    var uid = getState().auth.uid;
+
+    var setSearchTerm = firebaseRef.child(`users/${uid}/searchHistory`);
+    setSearchTerm.set(term);
+
+  }
 }
 
 //actions to fetch results
@@ -49,15 +57,18 @@ export var cleartotalBars = ()=>{
   }
 }
 export var getRecentSearch = (searchTerm, offset)=>{
-
   return (dispatch, getState)=>{
-    var getBars = process.env.NODE_ENV === 'production' ? `https://nightlife-coordination-fcc.herokuapp.com/yelpapi/businesses?location=${searchTerm}&offset=${offset}` : `http://localhost:3050/yelpapi/businesses?location=${searchTerm}&offset=${offset}`;
+    var getBars = process.env.NODE_ENV === 'production'
+                  ? `https://nightlife-coordination-fcc.herokuapp.com/yelpapi/businesses?location=${searchTerm}&offset=${offset}`
+                  : `http://localhost:3050/yelpapi/businesses?location=${searchTerm}&offset=${offset}`;
     axios.get(getBars).then((res)=>{
       let businesses = [];
       dispatch(totalBars(res.data.data.total));
 
         var resolveAll = res.data.data.businesses.map((business)=>{
-         var getReviews = process.env.NODE_ENV === 'production' ? `https://nightlife-coordination-fcc.herokuapp.com/yelpapi/reviews?id=${business.id.normalize('NFD').replace(/[\u0300-\u036f]/g, "")}` : `http://localhost:3050/yelpapi/reviews?id=${business.id.normalize('NFD').replace(/[\u0300-\u036f]/g, "")}`;
+         var getReviews = process.env.NODE_ENV === 'production'
+                          ? `https://nightlife-coordination-fcc.herokuapp.com/yelpapi/reviews?id=${business.id.normalize('NFD').replace(/[\u0300-\u036f]/g, "")}`
+                          : `http://localhost:3050/yelpapi/reviews?id=${business.id.normalize('NFD').replace(/[\u0300-\u036f]/g, "")}`;
          return axios.get(getReviews).then((result)=>{
 
             let obj = Object.assign({}, business, {reviews: result.data.data.reviews});
@@ -67,11 +78,32 @@ export var getRecentSearch = (searchTerm, offset)=>{
       });
       axios.all(resolveAll).then(()=>{
         dispatch(fetchItems(businesses));
+        console.log("Got");
       });
       // dispatch(fetchItems(businesses));
     });
   };
 }
+
+export var getRecentSearchfromHistory = ()=>{
+  return (dispatch, getState)=>{
+    //should fetch searchterm from firebase
+    //should set state searchTerm
+    //should fetch results from
+    var uid = getState().auth.uid;
+    var fetchSearchTerm = firebaseRef.child(`users/${uid}/searchHistory`);
+    var term = '';
+    fetchSearchTerm.once("value").then((snapshot)=>{
+      console.log(snapshot.val());
+      term = snapshot.val();
+      dispatch(saveSearchTerm(term));
+      dispatch(initialLoading(true));
+      dispatch(getRecentSearch(getState().recentSearch.savedSearch, 0));
+    });
+
+  };
+}
+
 
 // Loading progress
 export var initialLoading = (val) =>{
@@ -121,6 +153,7 @@ export var startLogin = () => {
 
     return firebase.auth().signInWithPopup(twitterProvider).then((result)=>{
       dispatch(loggingIn(false));
+
     }, (error)=>{
       console.log("Unable to Auth.", error);
     });
@@ -135,6 +168,9 @@ export var startLogout = () => {
   return (dispatch, getState)=>{
     return firebase.auth().signOut().then(()=> {
       dispatch(logout());
+      dispatch(clearItems());
+      dispatch(clearOffset());
+      dispatch(cleartotalBars());
   console.log("Logged out!");
 });
   };

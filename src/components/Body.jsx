@@ -10,12 +10,13 @@ class Body extends Component {
     super(props);
   }
 
+
   handleLogin(){
     //dispatch login action here
     var {dispatch} = this.props;
     dispatch(actions.loggingIn(true));
     dispatch(actions.startLogin());
-
+    
   }
 
   handleLogout(){
@@ -38,13 +39,18 @@ class Body extends Component {
 
   handleSubmit(e){
     e.preventDefault();
-    //dispatch action getRecentSearch with searchterm here
-    //updates the state and renders the list based on uid
-    //clear searchterm state and input
-    var {dispatch, searchTerm} = this.props;
+
+    var {dispatch, searchTerm, loadingProgress, auth} = this.props;
+
+    if (loadingProgress.loading || loadingProgress.loadingMore) {
+      return;
+    }
+
+    if (!loadingProgress.loading || !loadingProgress.loadingMore) {
       dispatch(actions.clearItems());
       dispatch(actions.clearOffset());
       dispatch(actions.cleartotalBars());
+    }
 
     if (searchTerm.length === 0 || searchTerm.match(/^\s*$/g)) {
         this.refs.searchTerm.value = '';
@@ -55,6 +61,11 @@ class Body extends Component {
     }
     dispatch(actions.initialLoading(true));
     dispatch(actions.saveSearchTerm(searchTerm));
+
+    if (auth.uid) {
+      dispatch(actions.saveSearchHistory(searchTerm));
+    }
+
     dispatch(actions.getRecentSearch(searchTerm, 0));
       this.refs.searchTerm.value = '';
     dispatch(actions.clearSearchTerm());
@@ -91,19 +102,16 @@ class Body extends Component {
               </div>
               <h2 className="nc-content-h2">See which bars are hoppin tonight and RSVP ahead of time!</h2>
               <h2 className="nc-content-h2">Remember: take a cab and drink responsibly.</h2>
-
-              <div className="nc-search">
+              <form className="nc-search">
                 <input type="text" className="nc-input-box" ref="searchTerm" onChange={this.handleChange.bind(this)}></input>
                 <button className="nc-search-btn" onClick={this.handleSubmit.bind(this)}>Go</button>
-              </div>
+              </form>
             </div>
             <div className="nc-list-container">
               <List />
             </div>
           </div>
-
           <span className="nc-inline-text">Designed and developed by Karthik   <a href="https://github.com/kmeda" target="_blank"><span className="fa fa-github fa-lg nc-git-hub"></span></a></span>
-
         </div>
         </div>
     )
@@ -114,10 +122,8 @@ export default Redux.connect(
   (state)=>{
     return {
       auth: state.auth,
-      searchTerm: state.recentSearch.searchTerm
+      searchTerm: state.recentSearch.searchTerm,
+      loadingProgress: state.loadingProgress
     }
   }
 )(Body);
-
-// if the user is not logged in render hints else render recent search or new search
-// search results should
