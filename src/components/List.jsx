@@ -3,6 +3,8 @@ import React,{Component} from 'react';
 import * as Redux from 'react-redux';
 import * as actions from "../actions/actions.jsx";
 
+import ListItem from './ListItem.jsx';
+
 class List extends Component {
   constructor(props){
     super(props);
@@ -33,28 +35,20 @@ class List extends Component {
 
     }
 
+
     _renderList(){
+
+      var renderGoingButton = ()=>{
+        if (this.props.isGoing) {
+          return <button className="nc-going-btn" onClick={this.setGoing.bind(this)}>Not Going</button>
+        } else {
+          return <button className="nc-going-btn" onClick={this.setGoing.bind(this)}>Going</button>
+        }
+      }
+
       return Object.values(this.props.searchResults).map((item)=>{
         return (
-          <div className="nc-bar-container" key={item.id}>
-
-            <div className="nc-business-image"><img className="nc-image-url" src={item.image_url} alt="No Picture"/></div>
-            <div className="nc-business-container">
-              <div className="nc-business-wrapper">
-                <div className="nc-business-name"><a href={item.url} target="_blank">{item.name}</a></div>
-                <div className="nc-going-container">
-                  <button className="nc-going-btn">Going</button>
-                  <div className="nc-going-count">0</div>
-                </div>
-              </div>
-              <div className="nc-business-review">{item.reviews[0]? item.reviews[0].text : "No reviews"}</div>
-            </div>
-            <div className="nc-business-address">
-              <div>{item.location.address1}</div>
-              <div>{item.location.city}</div>
-              <div>{item.location.zip_code}</div>
-            </div>
-          </div>
+          <ListItem key={item.id} item={item}/>
         );
       })
     }
@@ -68,7 +62,6 @@ class List extends Component {
             <button className="nc-page-btn" onClick={this._loadMore.bind(this)}>Load More..</button>
             <div className="nc-description">Showing {this.props.searchResults.length} of {this.props.totalBars}</div>
           </div>
-
         )
       }
     }
@@ -117,7 +110,8 @@ export default Redux.connect(
       searchTerm: state.recentSearch.savedSearch,
       offset: state.offset.value,
       loading: state.loadingProgress.loading,
-      loadingMore: state.loadingProgress.loadingMore
+      loadingMore: state.loadingProgress.loadingMore,
+      isGoing: state.isGoing.isGoing
     }
   }
 )(List);

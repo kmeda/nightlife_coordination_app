@@ -68,6 +68,18 @@ export var searchResultsReducer = (state={bars: []}, action) => {
   }
 }
 
+export var isGoingReducer = (state={isGoing: true}, action)=>{
+  switch (action.type) {
+    case "TOGGLE_GOING":
+      return {
+        isGoing: action.val
+      }
+    default:
+      return state;
+  }
+
+}
+
 export var offsetReducer = (state={value: 0}, action)=>{
   switch (action.type) {
     case "INCREMENT_OFFSET":

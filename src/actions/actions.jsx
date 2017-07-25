@@ -58,9 +58,13 @@ export var cleartotalBars = ()=>{
 }
 export var getRecentSearch = (searchTerm, offset)=>{
   return (dispatch, getState)=>{
+    var uid = getState().auth.uid || null;
+
+    var fetchUserList = firebaseRef.child(`goingList`);
     var getBars = process.env.NODE_ENV === 'production'
                   ? `https://nightlife-coordination-fcc.herokuapp.com/yelpapi/businesses?location=${searchTerm}&offset=${offset}`
                   : `http://localhost:3050/yelpapi/businesses?location=${searchTerm}&offset=${offset}`;
+
     axios.get(getBars).then((res)=>{
       let businesses = [];
       dispatch(totalBars(res.data.data.total));
@@ -69,18 +73,33 @@ export var getRecentSearch = (searchTerm, offset)=>{
          var getReviews = process.env.NODE_ENV === 'production'
                           ? `https://nightlife-coordination-fcc.herokuapp.com/yelpapi/reviews?id=${business.id.normalize('NFD').replace(/[\u0300-\u036f]/g, "")}`
                           : `http://localhost:3050/yelpapi/reviews?id=${business.id.normalize('NFD').replace(/[\u0300-\u036f]/g, "")}`;
-         return axios.get(getReviews).then((result)=>{
 
+         return axios.get(getReviews).then((result)=>{
             let obj = Object.assign({}, business, {reviews: result.data.data.reviews});
             businesses.push(obj);
-
         });
       });
-      axios.all(resolveAll).then(()=>{
-        dispatch(fetchItems(businesses));
-        console.log("Got");
+      resolveAll.push(fetchUserList.once("value"));
+
+      axios.all(resolveAll).then((res)=>{
+        // var fetchUserList = firebaseRef.child(`goingList`);
+
+           var barsList = res[res.length-1].val() || [];
+           Object.keys(barsList).map((key)=>{
+             businesses.map((business)=>{
+               if(business.id.normalize('NFD').replace(/[\u0300-\u036f]/g, "") === key){
+                 business["userData"] = barsList[key];
+               }
+             })
+           })
+           console.log(businesses);
+          //console.log(res[res.length-1].val());
+           
+          //  console.log(res);
+           dispatch(fetchItems(businesses));
+
+
       });
-      // dispatch(fetchItems(businesses));
     });
   };
 }
@@ -89,19 +108,57 @@ export var getRecentSearchfromHistory = ()=>{
   return (dispatch, getState)=>{
     //should fetch searchterm from firebase
     //should set state searchTerm
-    //should fetch results from
+    //should fetch results from yelp
     var uid = getState().auth.uid;
     var fetchSearchTerm = firebaseRef.child(`users/${uid}/searchHistory`);
-    var term = '';
     fetchSearchTerm.once("value").then((snapshot)=>{
-      console.log(snapshot.val());
-      term = snapshot.val();
+      var term = snapshot.val();
       dispatch(saveSearchTerm(term));
-      dispatch(initialLoading(true));
-      dispatch(getRecentSearch(getState().recentSearch.savedSearch, 0));
+      var searchTerm = getState().recentSearch.savedSearch;
+      if (searchTerm === null) {
+        return;
+      } else {
+        dispatch(initialLoading(true));
+        dispatch(getRecentSearch(searchTerm, 0));
+      }
+
     });
 
   };
+}
+
+
+
+// isGoing reducer actions
+export var toggleGoing = (val)=>{
+  return {
+    type: "TOGGLE_GOING",
+    val
+  }
+}
+
+export var addUsertoBar = (id)=>{
+  return (dispatch, getState)=>{
+    var uid = getState().auth.uid;
+    var bar_id = id.normalize('NFD').replace(/[\u0300-\u036f]/g, "");
+    var addBar = firebaseRef.child(`goingList/${bar_id}`);
+    addBar.push({uid: uid});
+  }
+}
+
+export var removeUserfromBar = (id)=>{
+  return (dispatch, getState)=>{
+    var uid = getState().auth.uid;
+    var removeBar = firebaseRef.child(`goingList/${id}`);
+
+    removeBar.orderByChild('uid').equalTo(uid)
+    .once('value').then((snapshot)=> {
+        snapshot.forEach((childSnapshot)=> {
+        removeBar.child(childSnapshot.key).remove();
+    });
+});
+
+  }
 }
 
 

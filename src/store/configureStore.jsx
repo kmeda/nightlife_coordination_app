@@ -1,7 +1,12 @@
 import * as Redux from 'redux';
 import thunk from 'redux-thunk';
 
-import {authReducer, recentSearchReducer, searchResultsReducer, offsetReducer, loadingProgressReducer} from '../reducers/reducers.jsx';
+import {  authReducer,
+          recentSearchReducer,
+          searchResultsReducer,
+          offsetReducer,
+          loadingProgressReducer,
+          isGoingReducer} from '../reducers/reducers.jsx';
 
 export var configure = (initialState = {}) => {
 
@@ -10,7 +15,8 @@ export var configure = (initialState = {}) => {
     recentSearch: recentSearchReducer,
     searchResults: searchResultsReducer,
     offset: offsetReducer,
-    loadingProgress: loadingProgressReducer
+    loadingProgress: loadingProgressReducer,
+    isGoing: isGoingReducer
   });
 
   var store = Redux.createStore(
@@ -23,4 +29,3 @@ export var configure = (initialState = {}) => {
   );
   return store;
 }
-   
