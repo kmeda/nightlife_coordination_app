@@ -50,7 +50,8 @@ export var searchResultsReducer = (state={bars: []}, action) => {
       }
     case "UPDATE_COUNT":
       return {
-        ...state
+        ...state,
+        bars: action.businnesses
       }
     case "CLEAR_ITEMS":
       return {

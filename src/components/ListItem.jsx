@@ -46,15 +46,14 @@ class ListItem extends Component {
     var uid = this.props.auth.uid;
 
     var userList = {};
-
+    var bar_id = item.id.normalize('NFD').replace(/[\u0300-\u036f]/g, "");
     Object.keys(goingList).map((each)=>{
-      if (each === item.id) {
+      if (each === bar_id) {
         // console.log(goingList[item.id]);
-        userList = goingList[item.id]
+        userList = goingList[bar_id];
       }
     });
 
-    var myData = item.userData ? item.userData : {};
     var findUID = ()=>{
       var myUID = _.find(Object.values(userList), {uid});
       if (myUID && myUID.uid === uid) {
