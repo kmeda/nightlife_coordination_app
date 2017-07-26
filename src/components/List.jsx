@@ -11,6 +11,10 @@ class List extends Component {
 
   }
 
+  componentDidUpdate(){
+    // console.log("Update received");
+  }
+
   componentWillReceiveProps(nextProps){
     let {dispatch} = this.props;
     if (nextProps.searchResults > this.props.searchResults) {
@@ -21,7 +25,6 @@ class List extends Component {
     if (nextProps.offset > this.props.offset) {
       dispatch(actions.getRecentSearch(this.props.searchTerm, nextProps.offset));
     }
-
   }
     _loadMore(e) {
       e.preventDefault();
@@ -37,18 +40,9 @@ class List extends Component {
 
 
     _renderList(){
-
-      var renderGoingButton = ()=>{
-        if (this.props.isGoing) {
-          return <button className="nc-going-btn" onClick={this.setGoing.bind(this)}>Not Going</button>
-        } else {
-          return <button className="nc-going-btn" onClick={this.setGoing.bind(this)}>Going</button>
-        }
-      }
-
       return Object.values(this.props.searchResults).map((item)=>{
         return (
-          <ListItem key={item.id} item={item}/>
+          <ListItem countData={this.props.countData} key={item.id} item={item}/>
         );
       })
     }
@@ -110,8 +104,7 @@ export default Redux.connect(
       searchTerm: state.recentSearch.savedSearch,
       offset: state.offset.value,
       loading: state.loadingProgress.loading,
-      loadingMore: state.loadingProgress.loadingMore,
-      isGoing: state.isGoing.isGoing
+      loadingMore: state.loadingProgress.loadingMore
     }
   }
 )(List);

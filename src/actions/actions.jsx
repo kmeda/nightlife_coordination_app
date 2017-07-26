@@ -69,7 +69,7 @@ export var getRecentSearch = (searchTerm, offset)=>{
       let businesses = [];
       dispatch(totalBars(res.data.data.total));
 
-        var resolveAll = res.data.data.businesses.map((business)=>{
+      var resolveAll = res.data.data.businesses.map((business)=>{
          var getReviews = process.env.NODE_ENV === 'production'
                           ? `https://nightlife-coordination-fcc.herokuapp.com/yelpapi/reviews?id=${business.id.normalize('NFD').replace(/[\u0300-\u036f]/g, "")}`
                           : `http://localhost:3050/yelpapi/reviews?id=${business.id.normalize('NFD').replace(/[\u0300-\u036f]/g, "")}`;
@@ -86,16 +86,15 @@ export var getRecentSearch = (searchTerm, offset)=>{
 
            var barsList = res[res.length-1].val() || [];
            Object.keys(barsList).map((key)=>{
+             var arr = [];
              businesses.map((business)=>{
                if(business.id.normalize('NFD').replace(/[\u0300-\u036f]/g, "") === key){
+
                  business["userData"] = barsList[key];
                }
              })
            })
-           console.log(businesses);
-          //console.log(res[res.length-1].val());
-           
-          //  console.log(res);
+
            dispatch(fetchItems(businesses));
 
 
@@ -106,9 +105,9 @@ export var getRecentSearch = (searchTerm, offset)=>{
 
 export var getRecentSearchfromHistory = ()=>{
   return (dispatch, getState)=>{
-    //should fetch searchterm from firebase
-    //should set state searchTerm
-    //should fetch results from yelp
+    dispatch(clearItems());
+    dispatch(clearOffset());
+    dispatch(cleartotalBars());
     var uid = getState().auth.uid;
     var fetchSearchTerm = firebaseRef.child(`users/${uid}/searchHistory`);
     fetchSearchTerm.once("value").then((snapshot)=>{
@@ -127,6 +126,34 @@ export var getRecentSearchfromHistory = ()=>{
   };
 }
 
+export var updateCount = (bars)=>{
+  return {
+    type: "UPDATE_COUNT",
+    bars
+  }
+}
+
+export var getGoingCount = (id)=>{
+  return (dispatch, getState) =>{
+    // fetch data from firebase
+    // get current state and attach count to this business id by mapping
+    // dispatch(actions.updateCount(businnesses));
+
+    var businesses = getState().searchResults.bars;
+
+    var fetchCount = firebaseRef.child(`goingList/${id.normalize('NFD').replace(/[\u0300-\u036f]/g, "")}`);
+    fetchCount.once("value").then((snapshot)=>{
+      businesses.map((business)=>{
+        if (business.id === id) {
+          business["userData"] = snapshot.val();
+        }
+      })
+      // ***** fetch userlist again and update businesses ******
+      //dispatch(updateCount(businesses));
+    });
+
+  }
+}
 
 
 // isGoing reducer actions
@@ -140,8 +167,7 @@ export var toggleGoing = (val)=>{
 export var addUsertoBar = (id)=>{
   return (dispatch, getState)=>{
     var uid = getState().auth.uid;
-    var bar_id = id.normalize('NFD').replace(/[\u0300-\u036f]/g, "");
-    var addBar = firebaseRef.child(`goingList/${bar_id}`);
+    var addBar = firebaseRef.child(`goingList/${id.normalize('NFD').replace(/[\u0300-\u036f]/g, "")}`);
     addBar.push({uid: uid});
   }
 }
@@ -149,7 +175,8 @@ export var addUsertoBar = (id)=>{
 export var removeUserfromBar = (id)=>{
   return (dispatch, getState)=>{
     var uid = getState().auth.uid;
-    var removeBar = firebaseRef.child(`goingList/${id}`);
+
+    var removeBar = firebaseRef.child(`goingList/${id.normalize('NFD').replace(/[\u0300-\u036f]/g, "")}`);
 
     removeBar.orderByChild('uid').equalTo(uid)
     .once('value').then((snapshot)=> {

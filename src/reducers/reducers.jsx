@@ -48,6 +48,10 @@ export var searchResultsReducer = (state={bars: []}, action) => {
         ...state,
         bars: state.bars.concat(action.payload)
       }
+    case "UPDATE_COUNT":
+      return {
+        ...state
+      }
     case "CLEAR_ITEMS":
       return {
         ...state,
@@ -72,7 +76,8 @@ export var isGoingReducer = (state={isGoing: true}, action)=>{
   switch (action.type) {
     case "TOGGLE_GOING":
       return {
-        isGoing: action.val
+        ...state,
+        isGoing: action.val ? false : true
       }
     default:
       return state;

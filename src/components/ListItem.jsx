@@ -2,47 +2,68 @@ import React,{Component} from 'react';
 
 import * as Redux from 'react-redux';
 import * as actions from "../actions/actions.jsx";
+import _ from "lodash";
+import firebase, {firebaseRef} from '../firebase/index.js';
 
 class ListItem extends Component {
   constructor(props){
     super(props);
   }
-
-  setGoing(item, e){
-    e.preventDefault();
-    // for this bar id push bar_id to firebase for this user
-    // on toggle remove it for this user
-
-    // how do you toggle ?
-    // set state and toggle it | based on this state change the button name
-    // if state is the required value? push to firebase : else remove from firebase
-    // state: isGoing: false
-    // state === false ? true : false;
-    //
-
-
-    // for every fetch there after filter through this list and get the count
-    //
-
-  var {dispatch, isGoing} = this.props;
-  e.target.innerText = e.target.innerText === "Going" ? "Not Going" : "Going";
-
-  if (e.target.innerText === "Going") {
-    //remove  from firebase
-    //dispatch action to do so
-    dispatch(actions.removeUserfromBar(item));
-
-  } else if (e.target.innerText === "Not Going") {
-    //add to firebase
-
-    dispatch(actions.addUsertoBar(item));
+  componentDidUpdate(){
+    console.log("Rendered");
   }
+
+  setGoing(id, e){
+    e.preventDefault();
+    var {dispatch, isGoing, item} = this.props;
+    var uid = this.props.auth.uid;
+
+    if (uid) {
+      e.target.innerText = e.target.innerText === "Going" ? "Not Going" : "Going";
+      if (e.target.innerText === "Going") {
+        dispatch(actions.removeUserfromBar(id));
+
+        setTimeout(()=>{
+        // dispatch(actions.getGoingCount(id));
+      }, 500);
+
+      } else if (e.target.innerText === "Not Going") {
+        dispatch(actions.addUsertoBar(id));
+        // dispatch(actions.getGoingCount(id));
+      }
+
+    } else {
+      alert("Login required to RSVP.");
+    }
 
   }
 
 
   render(){
+    // console.log(this.props.countData);
+    var goingList = this.props.countData;
     var {item} = this.props;
+    var uid = this.props.auth.uid;
+
+    var userList = {};
+
+    Object.keys(goingList).map((each)=>{
+      if (each === item.id) {
+        // console.log(goingList[item.id]);
+        userList = goingList[item.id]
+      }
+    });
+
+    var myData = item.userData ? item.userData : {};
+    var findUID = ()=>{
+      var myUID = _.find(Object.values(userList), {uid});
+      if (myUID && myUID.uid === uid) {
+        return true;
+      }
+      return false;
+    }
+
+
 
     return (
       <div className="nc-bar-container">
@@ -51,10 +72,12 @@ class ListItem extends Component {
           <div className="nc-business-wrapper">
             <div className="nc-business-name"><a href={item.url} target="_blank">{item.name}</a></div>
             <div className="nc-going-container">
+              <div className="nc-going-count">
+                { userList ? Object.keys(userList).length : 0 }
+              </div>
               <button className="nc-going-btn" onClick={this.setGoing.bind(this, item.id)}>
-                Going
+                {findUID() ? "Not Going" : "Going"}
               </button>
-              <div className="nc-going-count">0</div>
             </div>
           </div>
           <div className="nc-business-review">{item.reviews[0]? item.reviews[0].text : "No reviews"}</div>
@@ -73,9 +96,7 @@ export default Redux.connect(
   (state)=>{
     return {
       auth: state.auth,
-      searchTerm: state.recentSearch.searchTerm,
-      loadingProgress: state.loadingProgress,
-      isGoing: state.isGoing.isGoing
+      searchResults: state.searchResults.bars
     }
   }
 )(ListItem);

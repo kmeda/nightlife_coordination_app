@@ -21,9 +21,12 @@ firebase.auth().onAuthStateChanged((user)=>{
   }
 });
 
+var fetchCount = firebaseRef.child(`goingList`);
+fetchCount.on('value', (data)=>{
+  ReactDOM.render(
+    <Provider store={store}>
+      <Home countData={data.val()}/>
+    </Provider>,
+    document.getElementById('root'));
 
-ReactDOM.render(
-  <Provider store={store}>
-    <Home />
-  </Provider>,
-  document.getElementById('root'));
+})

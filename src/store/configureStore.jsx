@@ -5,8 +5,8 @@ import {  authReducer,
           recentSearchReducer,
           searchResultsReducer,
           offsetReducer,
-          loadingProgressReducer,
-          isGoingReducer} from '../reducers/reducers.jsx';
+          loadingProgressReducer
+          } from '../reducers/reducers.jsx';
 
 export var configure = (initialState = {}) => {
 
@@ -15,8 +15,7 @@ export var configure = (initialState = {}) => {
     recentSearch: recentSearchReducer,
     searchResults: searchResultsReducer,
     offset: offsetReducer,
-    loadingProgress: loadingProgressReducer,
-    isGoing: isGoingReducer
+    loadingProgress: loadingProgressReducer
   });
 
   var store = Redux.createStore(

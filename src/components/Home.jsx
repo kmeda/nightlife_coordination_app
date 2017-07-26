@@ -11,13 +11,13 @@ class Home extends Component {
     super(props);
   }
 
-  render(){
+  render(){    
     return (
       <div className="nc-container">
         <div><img className="nc-bg-image-1" alt="image-1"/></div>
         <div><img className="nc-bg-image-2" alt="image-2"/></div>
 
-        <Body />
+        <Body countData={this.props.countData}/>
       </div>
     )
   }

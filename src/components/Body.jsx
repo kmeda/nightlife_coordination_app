@@ -16,7 +16,7 @@ class Body extends Component {
     var {dispatch} = this.props;
     dispatch(actions.loggingIn(true));
     dispatch(actions.startLogin());
-    
+
   }
 
   handleLogout(){
@@ -108,7 +108,7 @@ class Body extends Component {
               </form>
             </div>
             <div className="nc-list-container">
-              <List />
+              <List countData={this.props.countData}/>
             </div>
           </div>
           <span className="nc-inline-text">Designed and developed by Karthik   <a href="https://github.com/kmeda" target="_blank"><span className="fa fa-github fa-lg nc-git-hub"></span></a></span>
