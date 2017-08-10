@@ -5,7 +5,7 @@ const CircularJSON = require('circular-json');
 var favicon = require('serve-favicon');
 
 const app = express();
-app.use(favicon(path.join(__dirname, + '/favicon.ico')));
+app.use(favicon(path.join(__dirname + '/favicon.ico')));
 
 app.use(function(req, res, next){
 res.header('Access-Control-Allow-Origin', "*");
