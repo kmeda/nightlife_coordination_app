@@ -23,13 +23,8 @@ class ListItem extends Component {
       if (e.target.innerText === "Going") {
         dispatch(actions.removeUserfromBar(id));
 
-        setTimeout(()=>{
-        // dispatch(actions.getGoingCount(id));
-      }, 500);
-
       } else if (e.target.innerText === "Not Going") {
         dispatch(actions.addUsertoBar(id));
-        // dispatch(actions.getGoingCount(id));
       }
 
     } else {
@@ -40,7 +35,7 @@ class ListItem extends Component {
 
 
   render(){
-    // console.log(this.props.countData);
+
     var goingList = this.props.countData;
     var {item} = this.props;
     var uid = this.props.auth.uid;
@@ -49,7 +44,6 @@ class ListItem extends Component {
     var bar_id = item.id.normalize('NFD').replace(/[\u0300-\u036f]/g, "");
     Object.keys(goingList).map((each)=>{
       if (each === bar_id) {
-        // console.log(goingList[item.id]);
         userList = goingList[bar_id];
       }
     });

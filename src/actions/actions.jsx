@@ -79,11 +79,10 @@ export var getRecentSearch = (searchTerm, offset)=>{
             businesses.push(obj);
         });
       });
+
       resolveAll.push(fetchUserList.once("value"));
 
       axios.all(resolveAll).then((res)=>{
-        // var fetchUserList = firebaseRef.child(`goingList`);
-
            var barsList = res[res.length-1].val() || [];
            Object.keys(barsList).map((key)=>{
              var arr = [];
@@ -94,10 +93,7 @@ export var getRecentSearch = (searchTerm, offset)=>{
                }
              })
            })
-
            dispatch(fetchItems(businesses));
-
-
       });
     });
   };
@@ -133,36 +129,6 @@ export var updateCount = (bars)=>{
   }
 }
 
-export var getGoingCount = (id)=>{
-  return (dispatch, getState) =>{
-    // fetch data from firebase
-    // get current state and attach count to this business id by mapping
-    // dispatch(actions.updateCount(businnesses));
-
-    var businesses = getState().searchResults.bars;
-
-    var fetchCount = firebaseRef.child(`goingList/${id.normalize('NFD').replace(/[\u0300-\u036f]/g, "")}`);
-    fetchCount.once("value").then((snapshot)=>{
-      businesses.map((business)=>{
-        if (business.id === id) {
-          business["userData"] = snapshot.val();
-        }
-      })
-      // ***** fetch userlist again and update businesses ******
-      //dispatch(updateCount(businesses));
-    });
-
-  }
-}
-
-
-// isGoing reducer actions
-export var toggleGoing = (val)=>{
-  return {
-    type: "TOGGLE_GOING",
-    val
-  }
-}
 
 export var addUsertoBar = (id)=>{
   return (dispatch, getState)=>{
