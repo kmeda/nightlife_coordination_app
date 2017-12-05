@@ -202,6 +202,7 @@ export var startLogin = () => {
       dispatch(loggingIn(false));
 
     }, (error)=>{
+      dispatch(loggingIn(false));
       console.log("Unable to Auth.", error);
     });
   };

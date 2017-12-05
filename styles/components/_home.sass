@@ -36,7 +36,6 @@ body
     .nc-wrapper
       width: 900px
       height: 100%
-      //margin-top: 130px
       .nc-login-btn
         display: flex
         justify-content: center
@@ -52,9 +51,9 @@ body
         font-size: 0.8em
         color: white
         &:hover
+          transform: translateY(-1px)
           color: black
-          background-color: #ffc700
-          border: 1px solid black
+          background-color: #ff9900
           font-weight: bolder
         &:active
           box-shadow: inset 0 0 5px rgba(0,0,0,0.8)
@@ -108,6 +107,7 @@ body
               height: 30px
               background-color: rgba(255,255,255,0.4)
               border: none
+              outline: none
               //margin-top: 50px
             .nc-search-btn
               display: flex
@@ -116,13 +116,15 @@ body
               font-weight: bolder
               font-size: 1.1em
               color: black
-              height: 32px
+              height: 30px
               width: 40px
               background-color: #ff9900
               cursor: pointer
               border: none
+              border-radius: 0
               &:hover
                 background-color: #ffc700
+                
               &:active
                 box-shadow: inset 0 0 5px rgba(0,0,0,0.8)
               &:focus
@@ -205,7 +207,7 @@ body
                     &:hover
                       background-color: #ffc700
                     &:active
-                      box-shadow: inset 0 0 5px rgba(0,0,0,0.8)
+                      box-shadow: inset 0 0 25px rgba(0,0,0,0.8)
                     &:focus
                       outline: 0
                   .nc-going-count
