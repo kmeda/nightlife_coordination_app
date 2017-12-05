@@ -2,12 +2,12 @@ import firebase from "firebase";
 
 if(process.env.NODE_ENV == 'production'){
     var config = {
-        apiKey: JSON.stringify(process.env.API_KEY),
-        authDomain: JSON.stringify(process.env.AUTH_DOMAIN),
-        databaseURL: JSON.stringify(process.env.DATABASE_URL),
-        projectId: JSON.stringify(process.env.PROJECT_ID),
-        storageBucket: JSON.stringify(process.env.STORAGE_BUCKET),
-        messagingSenderId: JSON.stringify(process.env.MESSAGING_SENDER_ID)
+        apiKey: process.env.API_KEY.toString(),
+        authDomain: process.env.AUTH_DOMAIN.toString(),
+        databaseURL: process.env.DATABASE_URL.toString(),
+        projectId: process.env.PROJECT_ID.toString(),
+        storageBucket: process.env.STORAGE_BUCKET.toString(),
+        messagingSenderId: process.env.MESSAGING_SENDER_ID.toString()
     };
 } else {
     var config = require('../../config/config').config;
