@@ -1,7 +1,7 @@
 import firebase from "firebase";
 
-try {
-  var config = {
+if(process.env.NODE_ENV == 'production'){
+    var config = {
         apiKey: process.env.API_KEY,
         authDomain: process.env.AUTH_DOMAIN,
         databaseURL: process.env.DATABASE_URL,
@@ -9,6 +9,13 @@ try {
         storageBucket: process.env.STORAGE_BUCKET,
         messagingSenderId: process.env.MESSAGING_SENDER_ID
     };
+} else {
+    var config = require('../../config/config').config;
+    
+}
+
+
+try {
     console.log(process.env.NODE_ENV);
     console.log(config);
     firebase.initializeApp(config);
