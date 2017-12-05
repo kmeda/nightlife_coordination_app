@@ -2,12 +2,12 @@ import firebase from "firebase";
 
 if(process.env.NODE_ENV == 'production'){
     var config = {
-        apiKey: process.env.API_KEY,
-        authDomain: process.env.AUTH_DOMAIN,
-        databaseURL: process.env.DATABASE_URL,
-        projectId: process.env.PROJECT_ID,
-        storageBucket: process.env.STORAGE_BUCKET,
-        messagingSenderId: process.env.MESSAGING_SENDER_ID
+        apiKey: JSON.stringify(process.env.API_KEY),
+        authDomain: JSON.stringify(process.env.AUTH_DOMAIN),
+        databaseURL: JSON.stringify(process.env.DATABASE_URL),
+        projectId: JSON.stringify(process.env.PROJECT_ID),
+        storageBucket: JSON.stringify(process.env.STORAGE_BUCKET),
+        messagingSenderId: JSON.stringify(process.env.MESSAGING_SENDER_ID)
     };
 } else {
     var config = require('../../config/config').config;
@@ -16,8 +16,6 @@ if(process.env.NODE_ENV == 'production'){
 
 
 try {
-    console.log(process.env.NODE_ENV);
-    console.log(config);
     firebase.initializeApp(config);
 } catch (e) {
 
