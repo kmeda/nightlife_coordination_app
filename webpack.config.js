@@ -3,6 +3,15 @@ var path = require('path');
 var ExtractTextPlugin = require('extract-text-webpack-plugin');
 var HtmlWebpackPlugin = require('html-webpack-plugin');
 
+var envFile = require('node-env-file');
+
+process.env.NODE_ENV = process.env.NODE_ENV || 'development';
+
+try {
+  envFile(path.join(__dirname, 'config/' + process.env.NODE_ENV + '.env'));
+} catch (e) {
+}
+
 const VENDOR_LIBS = [
   'react', 'redux', 'react-redux', 'react-dom',
   'redux-form', 'redux-thunk', 'react-router-dom','firebase'
@@ -97,6 +106,17 @@ module.exports = {
      $: "jquery",
      jQuery: "jquery"
    }),
-    new webpack.NamedModulesPlugin()
+    new webpack.NamedModulesPlugin(),
+    new webpack.DefinePlugin({
+      'process.env': {
+        NODE_ENV: JSON.stringify(process.env.NODE_ENV),
+        API_KEY: JSON.stringify(process.env.API_KEY),
+        AUTH_DOMAIN: JSON.stringify(process.env.AUTH_DOMAIN),
+        DATABASE_URL: JSON.stringify(process.env.DATABASE_URL),
+        STORAGE_BUCKET: JSON.stringify(process.env.STORAGE_BUCKET),
+        PROJECT_ID: JSON.stringify(process.env.PROJECT_ID),
+        MESSAGING_SENDER_ID: JSON.stringify(process.env.MESSAGING_SENDER_ID)
+      }
+    })
   ]
 };

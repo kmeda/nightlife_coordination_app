@@ -17,7 +17,6 @@ next();
 
 
 // Server routes...
-app.get('/hello', (req, res) => res.send({ hi: 'there' }));
 
 app.get('/yelpapi/businesses', (req, res)=>{
 
